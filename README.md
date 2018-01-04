@@ -1,0 +1,1 @@
+My introduction into learning React by making a simple todo list by following tutorials. 
