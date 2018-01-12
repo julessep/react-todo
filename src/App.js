@@ -13,12 +13,16 @@ class App extends Component {
 
   componentDidMount() {
     console.log('COMPONENT HAS MOUNTED');
-
+    var that = this;
     fetch('http://localhost:3000/api/tasks')
       .then(function (response) {
         response.json()
         .then( function (data) {
-          console.log(data)
+          let tasks = that.state.tasks;
+          tasks.concat(data);
+          that.setState({
+            tasks: data
+          })
         })
       })
   }
@@ -51,6 +55,31 @@ class App extends Component {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  removeTodo(id) {
+    var that = this;
+    var tasks = this.state.tasks;
+    let task = tasks.find(function(task) {
+      return task.id === id
+    });
+    // console.log(task)
+    var request = new Request('http://localhost:3000/api/remove/' + id, {
+      method: 'DELETE'
+    });
+
+    fetch(request)
+      .then(function(response) {
+        tasks.splice(tasks.indexOf(task), 1);
+        that.setState({
+          tasks: tasks
+        })
+        response.json()
+          .then(function(data){
+          
+          })
+      })
+
   }
 //   onChange = (event) => {
 //     this.setState({ term: event.target.value });
@@ -86,8 +115,10 @@ class App extends Component {
         <form ref="todoForm">
           <input type="text" ref="title" placeholder="What do you need to do?" />
           <button onClick={this.addTodo.bind(this)}>Add</button>
-          <pre>{JSON.stringify(tasks)}</pre>
         </form>
+        <ul>
+          {tasks.map(task => <li key={task.id}> {task.title} <button onClick={this.removeTodo.bind(this, task.id)}>Delete</button> </li>)}
+        </ul>
       </div>
     );
   }
