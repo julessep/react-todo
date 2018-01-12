@@ -1,41 +1,96 @@
 import React, { Component } from 'react';
 import './App.css';
-import List from './list';
+// import List from './list';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      term: '',
-      items: []
+      title: 'Jules Todo List',
+      tasks: []
     };
   }
 
-  onChange = (event) => {
-    this.setState({ term: event.target.value });
+  componentDidMount() {
+    console.log('COMPONENT HAS MOUNTED');
+
+    // fetch('http://localhost:3000/api/task')
+    //   .then((response) => {
+    //     response.json()
+    //     .then( (data) => {
+    //       console.log(data)
+    //     })
+    //   })
   }
 
-  onSubmit = (event) => {
+  addTodo(event) {
+    var that = this;
     event.preventDefault();
-    this.setState({
-      term: '',
-      items: [...this.state.items, this.state.term]
+    let task_data = {
+      title: this.refs.title.value,
+      id: Math.floor(Math.random() * 150)
+    };
+    var request = new Request('http://localhost:3000/api/task', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(task_data)
     });
-  }
 
+    let tasks = that.state.tasks;
+    tasks.push(task_data);
+    that.setState({
+      tasks: tasks
+    });
+
+    fetch(request)
+      .then(function(response) {
+        response.json()
+          .then(function(data){
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+//   onChange = (event) => {
+//     this.setState({ term: event.target.value });
+//   }
+
+//   onSubmit = (event) => {
+//     event.preventDefault();
+//     this.setState({
+//       term: '',
+//       items: [...this.state.items, this.state.term]
+//     });
+//   }
+
+//   render() {
+//     let title = this.state.title;
+//     return (
+//       <div>
+//         <form className="App" onSubmit={this.onSubmit}>
+//           <input value={this.state.term} onChange={this.onChange} />
+//           <button>Submit</button>
+//         </form>
+//         <List items={this.state.items} />
+//       </div>
+//     );
+//   }
+// }
   render() {
+    let title = this.state.title;
+    let tasks = this.state.tasks;
     return (
-      <div>
-        <form className="App" onSubmit={this.onSubmit}>
-          <input value={this.state.term} onChange={this.onChange} />
-          <button>Submit</button>
+      <div className="App">
+        <h1>{title}</h1>
+        <form ref="todoForm">
+          <input type="text" ref="title" placeholder="What do you need to do?" />
+          <button onClick={this.addTodo.bind(this)}>Add</button>
+          <pre>{JSON.stringify(tasks)}</pre>
         </form>
-        <List items={this.state.items} />
       </div>
     );
   }
 }
-
-
 
 export default App;
