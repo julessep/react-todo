@@ -14,13 +14,13 @@ class App extends Component {
   componentDidMount() {
     console.log('COMPONENT HAS MOUNTED');
 
-    // fetch('http://localhost:3000/api/task')
-    //   .then((response) => {
-    //     response.json()
-    //     .then( (data) => {
-    //       console.log(data)
-    //     })
-    //   })
+    fetch('http://localhost:3000/api/tasks')
+      .then(function (response) {
+        response.json()
+        .then( function (data) {
+          console.log(data)
+        })
+      })
   }
 
   addTodo(event) {
@@ -30,7 +30,7 @@ class App extends Component {
       title: this.refs.title.value,
       id: Math.floor(Math.random() * 150)
     };
-    var request = new Request('http://localhost:3000/api/task', {
+    var request = new Request('http://localhost:3000/api/tasks', {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(task_data)
