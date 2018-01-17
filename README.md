@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Software Requirements
 
-- [Node.js] (https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/)
 - [npm](https://www.npmjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
 
